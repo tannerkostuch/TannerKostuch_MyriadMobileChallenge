@@ -69,8 +69,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
-        View itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row, parent, false);
-        return new MyViewHolder(itemView);
+        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_row, parent, false));
     }
 
     public String goodTimeFactory(String hour, String minute){

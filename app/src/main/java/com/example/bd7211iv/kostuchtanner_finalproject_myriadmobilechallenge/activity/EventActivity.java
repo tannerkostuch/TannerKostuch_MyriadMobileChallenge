@@ -1,10 +1,11 @@
 package com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,11 +15,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.R;
 import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.model.Event;
-import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.model.EventAdapter;
 import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.model.Speaker;
 import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.model.SpeakerAdapter;
 import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.rest.ApiService;
@@ -61,7 +60,6 @@ public class EventActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(recyclerTitle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         speakers= new ArrayList<>();
         final ApiService apiService= new ApiService();
         apiService.getSpecificEvent(new Callback<Event>() {
@@ -91,8 +89,8 @@ public class EventActivity extends AppCompatActivity {
                                 //System.out.println(speakers.size());
                                 RecyclerView recyclerView = findViewById(R.id.event_recycler_view);
                                 SpeakerAdapter sAdapter = new SpeakerAdapter(speakers);
-                                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                                recyclerView.setLayoutManager(mLayoutManager);
+
+                                recyclerView.setLayoutManager( new LinearLayoutManager(EventActivity.this));
                                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                                 recyclerView.setAdapter(sAdapter);
                             }
@@ -138,8 +136,8 @@ public class EventActivity extends AppCompatActivity {
                 // Do whatever you want to do on logout click.
                 SharedPreferences prefs=getSharedPreferences("PREFS",Context.MODE_PRIVATE);
                 prefs.edit().putString("Token","").apply();
-                Intent backToLogin= new Intent(this, LoginActivity.class);
-                startActivity(backToLogin);
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

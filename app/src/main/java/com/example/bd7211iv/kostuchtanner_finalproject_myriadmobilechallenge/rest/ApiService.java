@@ -4,7 +4,6 @@ import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.mod
 import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.model.Speaker;
 import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.model.Token;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Callback;

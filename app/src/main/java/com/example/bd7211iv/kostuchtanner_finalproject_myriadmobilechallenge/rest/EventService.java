@@ -4,12 +4,9 @@ import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.mod
 import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.model.Speaker;
 import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.model.Token;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;

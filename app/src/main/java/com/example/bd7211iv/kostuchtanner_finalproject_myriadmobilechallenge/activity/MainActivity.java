@@ -46,8 +46,7 @@ public class MainActivity extends AppCompatActivity {
                     List<Event> events= response.body();
                     RecyclerView recyclerView= findViewById(R.id.recycler_view);
                     EventAdapter eAdapter= new EventAdapter(events);
-                    RecyclerView.LayoutManager mLayoutManager= new LinearLayoutManager(getApplicationContext());
-                    recyclerView.setLayoutManager(mLayoutManager);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                     recyclerView.setItemAnimator(new DefaultItemAnimator());
                     recyclerView.setAdapter(eAdapter);
             }
@@ -59,10 +58,6 @@ public class MainActivity extends AppCompatActivity {
         },token);
     }
 
-    @Override
-    public void onBackPressed(){
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
                 // Do whatever you want to do on logout click.
                 prefs=getSharedPreferences("PREFS",Context.MODE_PRIVATE);
                 prefs.edit().putString("Token","").apply();
-                Intent backToLogin= new Intent(this, LoginActivity.class);
-                startActivity(backToLogin);
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

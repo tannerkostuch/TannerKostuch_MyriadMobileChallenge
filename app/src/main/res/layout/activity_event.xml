@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".activity.EventActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarEvent"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@android:color/white"
+        android:background="?attr/colorPrimary">
+    </android.support.v7.widget.Toolbar>
+
     <ImageView
         android:id="@+id/eventImage"
         android:layout_width="match_parent"
@@ -67,16 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/eventLocation"
         android:layout_alignParentStart="true"
-        android:text="Speakers:" />
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbarEvent"
-        android:minHeight="?attr/actionBarSize"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:titleTextColor="@android:color/white"
-        android:background="?attr/colorPrimary">
-    </android.support.v7.widget.Toolbar>
+        android:text="@string/speakers_label" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/event_recycler_view"

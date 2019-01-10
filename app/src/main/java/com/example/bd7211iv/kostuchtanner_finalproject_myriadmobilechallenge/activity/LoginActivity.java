@@ -3,24 +3,22 @@ package com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.ac
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -34,7 +32,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.R;
-import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.model.Event;
 import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.model.Token;
 import com.example.bd7211iv.kostuchtanner_finalproject_myriadmobilechallenge.rest.ApiService;
 
@@ -44,8 +41,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.POST;
-import retrofit2.http.Path;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -59,12 +54,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     */
-//    private static final String[] DUMMY_CREDENTIALS = new String[]{
-//            "foo@example.com:hello", "bar@example.com:world"
-//    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -83,8 +72,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         SharedPreferences prefs=getSharedPreferences("PREFS",Context.MODE_PRIVATE);
         if(!prefs.getString("Token","").equals("")){
-            Intent loggedin = new Intent(this, MainActivity.class);
-            startActivity(loggedin);
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
             // System.out.println("Passed if");
         }
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -209,18 +198,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
-//            SharedPreferences prefs=getSharedPreferences("PREFS",Context.MODE_PRIVATE);
-//            //System.out.println(prefs.getString("Token",""));
-//            if(!prefs.getString("Token","").equals("")){
-//                Intent loggedin = new Intent(this, MainActivity.class);
-//                startActivity(loggedin);
-//               // System.out.println("Passed if");
-//            }
-//            else{
-//                Toast.makeText(getApplicationContext(),"Unable to connect to server", Toast.LENGTH_SHORT).show();
-//                Intent backToLogin= new Intent(getApplicationContext(),LoginActivity.class);
-//                startActivity(backToLogin);
-//            }
 
 
         }
@@ -303,7 +280,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
+        //no-op
     }
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
@@ -330,7 +307,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mPassword;
@@ -342,36 +319,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            try {
-                // Simulate network access.
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                return false;
-            }
+
             ApiService apiService= new ApiService();
+
             apiService.login(new Callback<Token>() {
                 @Override
                 public void onResponse(Call<Token> call, Response<Token> response) {
                     Token token= response.body();
                     SharedPreferences prefs=getSharedPreferences("PREFS",Context.MODE_PRIVATE);
                     prefs.edit().putString("Token",token.getToken()).apply();
-                    //System.out.println(prefs.getString("Token",""));
-
-                    Intent loggedin = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(loggedin);
-
                 }
 
                 @Override
                 public void onFailure(Call<Token> call, Throwable t) {
                     Toast.makeText(getApplicationContext(),"Unable to connect to server", Toast.LENGTH_SHORT).show();
-                    Intent backToLogin= new Intent(getApplicationContext(),LoginActivity.class);
-                    startActivity(backToLogin);
+                    startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                    finish();
                 }
             },mEmail,mPassword);
-
-
+            //TODO: Fix bug where method will return before response is obtained.
             return true;
+
         }
 
         @Override
@@ -380,6 +348,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
